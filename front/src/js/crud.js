@@ -8,8 +8,8 @@
 //     }
 // });
 
-let get_url = 'https://dorogoy-proekt-final.kxxo.ru/api/items',
-    save_url = 'https://dorogoy-proekt-final.kxxo.ru/api/items/set-data';
+let get_url = 'https://dorogoy-proekt-final-api.kxxo.ru/api/items',
+    save_url = 'https://dorogoy-proekt-final-api.kxxo.ru/api/items/set-data';
 
 new Vue({
     el: "#todo",
