@@ -1,0 +1,205 @@
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Последняя часть</title>
+
+    <meta name="robots" content="noindex">
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/src/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/src/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/src/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/src/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
+
+
+    <link href="src/css/template.css" type="text/css" rel="stylesheet">
+
+    <link href="src/css/crud.css" type="text/css" rel="stylesheet">
+
+    <link href="src/css/cs404.css" type="text/css" rel="stylesheet">
+
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+	<link href="src/css/map.css" type="text/css" rel="stylesheet">
+
+	<link href="src/css/graph.css" type="text/css" rel="stylesheet">
+
+
+</head>
+
+<body translate="no">
+
+	<div class="dashboard">
+		<!-- Dashboard Sidebar (Block)-->
+		<div class="dashboard-sidebar">
+			<!-- Brand (Element)-->
+			<div class="dashboard-sidebar__brand">
+				ПУ "БАРАКУДА"
+
+			</div>
+			<!-- Dashboard Nav (Block)-->
+			<div class="dashboard-nav">
+				<ul>
+					<!-- Item (Element)-->
+					<li class="dashboard-nav__item dashboard-nav__item--selected"><a href="home"><img
+							src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_home.svg">Home</a>
+					</li>
+					<!-- Item:Selected (Element:Modifier)        -->
+					<li class="dashboard-nav__item "><a href="my_trip"><img
+							src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_my_trip.svg">My Trip</a>
+					</li>
+					<!-- Item (Element)-->
+					<li class="dashboard-nav__item"><a href="discover_places"><img
+							src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_discover_places.svg">CRUD</a></li>
+					<!-- Item (Element)-->
+					<li class="dashboard-nav__item"><a href="notifications"><img
+							src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_notifications.svg">Notifications</a>
+					</li>
+					<!-- Item (Element)-->
+					<li class="dashboard-nav__item"><a href="settings"><img
+							src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/planner_dashboard_settings.svg">Settings</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- Dashboard Content (Block)-->
+		<div class="dashboard-content">
+			<!-- Dashboard Header (Block)-->
+			<div class="dashboard-header">
+			</div>
+			<!-- Dashboard Content Panel (Element)-->
+			<div class="dashboard-content__panel" data-panel-id="home" style="display: block ;">
+				<div id="wrapper">
+					<div class="content-area">
+						<div class="container-fluid">
+							<div class="main">
+								<div class="row mt-4">
+									<div class="col-md-5">
+										<div class="box columnbox mt-4">
+											<div id="columnchart"> </div>
+										</div>
+									</div>
+									<div class="col-md-7">
+										<div class="box  mt-4">
+											<div id="linechart"> </div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="biorobot-label">
+					Местонахождение биоробота:
+				</div>
+				<div id="map-container">
+					<div id="map"></div>
+				</div>
+			</div>
+			<!-- Dashboard Content Panel (Element)-->
+			<div class="dashboard-content__panel cs404-container" data-panel-id="my_trip"
+				 style="display: none;">
+				<div class="cs404" title="404">404</div>
+
+			</div>
+			<!-- Dashboard Content Panel (Element)-->
+			<div class="dashboard-content__panel" data-panel-id="discover_places" style="display: none;">
+
+				<div class="crud-container">
+
+					<h2>Ваш CRUD </h2>
+					<div class="container" id="todo">
+						<section class="panel up-panel">
+							<input v-model="newItemMessage" placeholder="Название статуса" autofocus class="text-input">
+							<input v-model="newItemCost" type="number" id="mark-all" min=0 placeholder="Стоимость"
+								   class="text-input">
+							<button class="btn instance_design_button_color" @click="addTask">+ Добавить</button>
+						</section>
+
+						<section class="list">
+							<ul class="list-item">
+								<li v-for="task in orderedItems">
+									<input type="text" v-if="task.is_edit_mode" class="text-input"
+										   @keyup.enter="endEditing(task)"
+										   @blur="endEditing(task)" v-model="editingTask.name">
+									<input type="number" class="text-input" v-if="task.is_edit_mode"
+										   @keyup.enter="endEditing(task)"
+										   @blur="endEditing(task)" v-model="editingTask.rating" min="0">
+
+									<label v-if="!task.is_edit_mode" @dblclick="editTask(task)">{{ task.name }}</label>
+									<label v-if="!task.is_edit_mode" @dblclick="editTask(task)">{{ task.rating }}</label>
+
+									<button class="delete" @click="removeTask(task)">X</button>
+								</li>
+							</ul>
+						</section>
+						<section class="panel bottom-panel">
+							<label class="error-message" v-if="errorMessage">{{ errorMessage }}</label>
+
+							<button id="save-button" class="pull-right btn instance_design_button_color is-active "
+									:disabled="!IsButtonSaveActive" @click="save"> Сохранить
+							</button>
+							<button id="reset-button" class="pull-right btn instance_design_button_color " @click="reset">
+								Сбросить
+							</button>
+
+							<div class="clearfix"></div>
+						</section>
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="dashboard-content__panel cs404-container" data-panel-id="notifications" style="display: none;">
+				<div class="cs404" title="404">404</div>
+			</div>
+
+			<div class="dashboard-content__panel cs404-container" data-panel-id="settings" style="display: none;">
+				<div class="cs404" title="404">404</div>
+			</div>
+
+		</div>
+		<!-- Dashboard Preview (Block)  -->
+	</div>
+
+
+	<div id="background-for-loader"></div>
+	<div id="loader"></div>
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+	<script src="src/js/graph.js"></script>
+
+
+
+	<script src="src/js/map.js"></script>
+
+	<script src="src/js/weather.js"></script>
+	<script src="src/js/vue.js"></script>
+	<script src="src/js/lodash.min.js"></script>
+	<script src="src/js/crud.js"></script>
+	<script src="src/js/template.js"></script>
+
+
+</body>
+</html>
